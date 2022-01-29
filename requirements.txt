@@ -1,0 +1,10 @@
+black
+isort
+mypy
+black
+flake8
+pytest
+fastapi~=0.71.0
+uvicorn~=0.16.0
+starlette~=0.17.1
+pydantic~=1.9.0
