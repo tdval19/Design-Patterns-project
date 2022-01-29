@@ -7,5 +7,5 @@ api = APIRouter()
 
 
 @api.get("/test")
-def fetch_book(core: TestService = Depends(get_core)) -> str:
+def test(core: TestService = Depends(get_core)) -> str:
     return core.hello()
