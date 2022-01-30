@@ -38,22 +38,30 @@ class StatisticsResponse(BaseModel):
 
 
 @api.get("/wallets/{address}")
-def get_wallets(user_id: int, address: int, core: BitcoinService = Depends(get_core)) -> WalletResponse:
+def get_wallets(
+    user_id: int, address: int, core: BitcoinService = Depends(get_core)
+) -> WalletResponse:
     pass
 
 
 @api.get("/transactions")
-def get_transactions(user_id: int, core: BitcoinService = Depends(get_core)) -> TransactionsResponse:
+def get_transactions(
+    user_id: int, core: BitcoinService = Depends(get_core)
+) -> TransactionsResponse:
     pass
 
 
 @api.get("/wallets/{address}/transactions")
-def get_address_transactions(user_id: int, address: int, core: BitcoinService = Depends(get_core)) -> TransactionsResponse:
+def get_address_transactions(
+    user_id: int, address: int, core: BitcoinService = Depends(get_core)
+) -> TransactionsResponse:
     pass
 
 
 @api.get("/statistics")
-def get_statistics(admin_key: int, core: BitcoinService = Depends(get_core)) -> StatisticsResponse:
+def get_statistics(
+    admin_key: int, core: BitcoinService = Depends(get_core)
+) -> StatisticsResponse:
     pass
 
 
@@ -63,11 +71,14 @@ def post_users(core: BitcoinService = Depends(get_core)) -> int:
 
 
 @api.post("/wallets")
-def post_wallets(api_key: int, core: BitcoinService = Depends(get_core)) -> WalletResponse:
+def post_wallets(
+    api_key: int, core: BitcoinService = Depends(get_core)
+) -> WalletResponse:
     pass
 
 
 @api.post("/transactions")
-def post_transactions(api_key: int, request: TransactionRequest, core: BitcoinService = Depends(get_core)) -> None:
+def post_transactions(
+    api_key: int, request: TransactionRequest, core: BitcoinService = Depends(get_core)
+) -> None:
     pass
-

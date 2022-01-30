@@ -8,5 +8,3 @@ from app.core.models.user import User
 class UserInteractor:
     def create_user(self) -> Optional[User]:
         pass
-
-

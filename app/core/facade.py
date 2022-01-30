@@ -18,15 +18,17 @@ class BitcoinService:
     transaction_interactor: TransactionsInteractor
     user_interactor: UserInteractor
 
-    #wallet_interactor
+    # wallet_interactor
     def get_wallets(self, user_id: int, address: int) -> Optional[Wallet]:
         return self.wallet_interactor.get_wallets(user_id, address)
 
     def create_wallet(self, user_id: int) -> Optional[Wallet]:
         return self.wallet_interactor.create_wallet(user_id)
 
-    #transactions_interactor
-    def get_wallet_transactions(self, user_id: int, address: int) -> Optional[List[Transaction]]:
+    # transactions_interactor
+    def get_wallet_transactions(
+        self, user_id: int, address: int
+    ) -> Optional[List[Transaction]]:
         return self.transaction_interactor.get_wallet_transactions(user_id, address)
 
     def get_transactions(self, user_id: int) -> Optional[List[Transaction]]:
@@ -35,14 +37,10 @@ class BitcoinService:
     def make_transaction(self, user_id: int, transaction: Transaction) -> bool:
         return self.transaction_interactor.make_transaction(user_id, transaction)
 
-    #user_interactor
+    # user_interactor
     def create_user(self) -> Optional[User]:
         return self.user_interactor.create_user()
 
-    #admin_interactor
+    # admin_interactor
     def get_statistics(self, admin_key: int) -> Optional[Statistics]:
         return self.admin_interactor.get_statistics(admin_key)
-
-
-
-
