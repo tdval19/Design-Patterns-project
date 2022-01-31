@@ -11,5 +11,3 @@ class WalletInteractor:
 
     def create_wallet(self, user_id: int) -> Optional[Wallet]:
         pass
-
-
