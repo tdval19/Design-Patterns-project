@@ -17,6 +17,6 @@ def setup() -> FastAPI:
         WalletInteractor(),
         TransactionsInteractor(),
         UserInteractor(),
+        CexBitcoinConverter(),
     )
-    app.state.converter = CexBitcoinConverter()
     return app

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, List
 
+from app.core.converter.bitcoin_converter import IBitcoinConverter
 from app.core.interactors.admin import AdminInteractor
 from app.core.interactors.transactions import TransactionsInteractor
 from app.core.interactors.users import UserInteractor
@@ -17,6 +18,7 @@ class BitcoinService:
     wallet_interactor: WalletInteractor
     transaction_interactor: TransactionsInteractor
     user_interactor: UserInteractor
+    bitcoin_converter: IBitcoinConverter
 
     # wallet_interactor
     def get_wallets(self, user_id: int, address: int) -> Optional[Wallet]:
@@ -44,3 +46,7 @@ class BitcoinService:
     # admin_interactor
     def get_statistics(self, admin_key: int) -> Optional[Statistics]:
         return self.admin_interactor.get_statistics(admin_key)
+
+    # bitcoin_converter
+    def convert_bitcoin_to(self, currency: str) -> Optional[float]:
+        return self.bitcoin_converter.convert_btc_to(currency)
