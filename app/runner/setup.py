@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.core.converter.bitcoin_converter import CexBitcoinConverter
 from app.core.facade import BitcoinService
 from app.core.interactors.admin import AdminInteractor
 from app.core.interactors.transactions import TransactionsInteractor
@@ -16,5 +17,6 @@ def setup() -> FastAPI:
         WalletInteractor(),
         TransactionsInteractor(),
         UserInteractor(),
+        CexBitcoinConverter(),
     )
     return app

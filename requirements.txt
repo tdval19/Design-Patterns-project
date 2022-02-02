@@ -8,3 +8,5 @@ fastapi~=0.71.0
 uvicorn~=0.16.0
 starlette~=0.17.1
 pydantic~=1.9.0
+types_requests
+requests
