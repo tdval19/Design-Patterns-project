@@ -13,3 +13,7 @@ class AdminInteractor:
             return self.statistics_repository.get_statistics()
         else:
             return None
+
+    def update_statistics(self, num_transactions: int, amount: float) -> None:
+        pass
+        

@@ -11,8 +11,8 @@ class TransactionsInteractor:
     ) -> Optional[List[Transaction]]:
         pass
 
-    def get_transactions(self, user_id: int) -> Optional[List[Transaction]]:
+    def get_user_transactions(self, user_id: int) -> Optional[List[Transaction]]:
         pass
 
-    def make_transaction(self, user_id: int, transaction: Transaction) -> bool:
+    def transfer(self, user_id: int, transaction: Transaction) -> bool:
         pass

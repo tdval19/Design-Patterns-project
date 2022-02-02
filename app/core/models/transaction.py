@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Transaction:
-    from_id: int
-    to_id: int
+    from_address: int
+    to_address: int
     amount: float
+    fee: float = 0
