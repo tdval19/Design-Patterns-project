@@ -26,4 +26,3 @@ class InitDb:
 
         create_statistics_table = '''CREATE TABLE IF NOT EXISTS statistics_table (variable TEXT, value DOUBLE)'''
         self.cursor.execute(create_statistics_table)
-
