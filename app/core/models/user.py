@@ -7,5 +7,3 @@ from app.core.models.wallet import Wallet
 @dataclass
 class User:
     user_id: int
-    wallets: List[Wallet]
-    balance_btc: float

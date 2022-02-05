@@ -9,4 +9,3 @@ class Wallet:
     wallet_id: int
     user_id: int
     balance_btc: float
-    transactions: List[Transaction]
