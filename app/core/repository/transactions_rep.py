@@ -45,7 +45,8 @@ class TransactionRepository(ITransactionRepository):
             res_list.append(transaction.Transaction(trans[0], trans[1], trans[2], trans[3]))
 
         get_to_wallet_address = "SELECT from_wallet_address, to_wallet_address, bitcoin_quantity, fee FROM " \
-                                "transaction_table WHERE to_wallet_address = ? "
+                                "transaction_table WHERE to_wallet_address = ? AND " \
+                                " to_wallet_address != from_wallet_address"
         self.cursor.execute(get_to_wallet_address, [wallet_address])
         to_wallet = self.cursor.fetchall()
 
