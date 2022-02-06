@@ -23,35 +23,39 @@ class TransactionRepository(ITransactionRepository):
 
     def get_user_transactions(self, user_id: int) -> List[transaction.Transaction]:
         res_list: List[transaction.Transaction] = []
+        res_set: set = set()
         get_user_wallets = "SELECT wallet_address FROM wallet_table WHERE user_id = ?"
         self.cursor.execute(get_user_wallets, [user_id])
         user_wallets = self.cursor.fetchall()
 
         for wallet_address in user_wallets:
-            curr_wallet_transactions = self.get_wallet_transactions(user_id, wallet_address)
-            res_list.extend(curr_wallet_transactions)
+            curr_wallet_transactions = self.get_wallet_transactions(user_id, wallet_address[0])
+            for curr_trans in curr_wallet_transactions:
+                if not res_set.__contains__(curr_trans.transaction_id):
+                    res_list.append(curr_trans)
+                    res_set.add(curr_trans.transaction_id)
 
         return res_list
 
     def get_wallet_transactions(self,  user_id: int, wallet_address: int) -> List[transaction.Transaction]:
         res_list: List[transaction.Transaction] = []
 
-        get_from_wallet_address = "SELECT from_wallet_address, to_wallet_address, bitcoin_quantity, fee  FROM " \
-                                  "transaction_table WHERE from_wallet_address = ? "
+        get_from_wallet_address = "SELECT from_wallet_address, to_wallet_address, bitcoin_quantity," \
+                                  " fee, transaction_id  FROM transaction_table WHERE from_wallet_address = ? "
         self.cursor.execute(get_from_wallet_address, [wallet_address])
         from_wallet = self.cursor.fetchall()
 
         for trans in from_wallet:
-            res_list.append(transaction.Transaction(trans[0], trans[1], trans[2], trans[3]))
+            res_list.append(transaction.Transaction(trans[0], trans[1], trans[2], trans[3], trans[4]))
 
-        get_to_wallet_address = "SELECT from_wallet_address, to_wallet_address, bitcoin_quantity, fee FROM " \
-                                "transaction_table WHERE to_wallet_address = ? AND " \
+        get_to_wallet_address = "SELECT from_wallet_address, to_wallet_address, bitcoin_quantity, fee, transaction_id" \
+                                " FROM transaction_table WHERE to_wallet_address = ? AND " \
                                 " to_wallet_address != from_wallet_address"
         self.cursor.execute(get_to_wallet_address, [wallet_address])
         to_wallet = self.cursor.fetchall()
 
         for trans in to_wallet:
-            res_list.append(transaction.Transaction(trans[0], trans[1], trans[2], trans[3]))
+            res_list.append(transaction.Transaction(trans[0], trans[1], trans[2], trans[3], trans[4]))
 
         return res_list
 
