@@ -2,19 +2,20 @@ from dataclasses import dataclass
 from typing import Optional, List
 from app.core.repository import transactions_rep
 from app.core.models.transaction import Transaction
+from app.core.repository.repository_interfaces import ITransactionRepository
 
 
 @dataclass
 class TransactionsInteractor:
-    transaction_repository: transactions_rep.ITransactionRepository
+    transaction_repository: ITransactionRepository
 
     def get_wallet_transactions(
         self, user_id: int, address: int
     ) -> Optional[List[Transaction]]:
-        return self.transaction_repository.get_wallet_transactions(user_id, address)
+        return self.transaction_repository.get_transactions_by_wallet_address(address)
 
     def get_user_transactions(self, user_id: int) -> Optional[List[Transaction]]:
-        return self.transaction_repository.get_user_transactions(user_id)
+        return self.transaction_repository.get_transactions_by_user_id(user_id)
 
-    def transfer(self, user_id: int, transaction: Transaction) -> bool:
-        return self.transaction_repository.make_transfer(user_id, transaction)
+    def transfer(self, user_id: int, transaction: Transaction) -> None:
+        self.transaction_repository.add(transaction)

@@ -26,7 +26,9 @@ class IWalletRepository(Protocol):
 
 
 class ITransactionRepository(Protocol):
-    def get_transactions_by_wallet_id(self, wallet_id: int) -> List[Transaction]:
+    def get_transactions_by_wallet_address(
+        self, wallet_address: int
+    ) -> List[Transaction]:
         pass
 
     def get_transactions_by_user_id(self, user_id: int) -> List[Transaction]:

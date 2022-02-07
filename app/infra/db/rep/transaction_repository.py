@@ -14,7 +14,7 @@ class TransactionRepository(ITransactionRepository):
         self.connection = sqlite3.connect(self.db_name)
         self.cursor = self.connection.cursor()
 
-    def get_user_transactions(self, user_id: int) -> List[Transaction]:
+    def get_transactions_by_user_id(self, user_id: int) -> List[Transaction]:
         res_list: List[Transaction] = []
         res_set: set = set()
         get_user_wallets = "SELECT wallet_address FROM wallet_table WHERE user_id = ?"
@@ -22,8 +22,8 @@ class TransactionRepository(ITransactionRepository):
         user_wallets = self.cursor.fetchall()
 
         for wallet_address in user_wallets:
-            curr_wallet_transactions = self.get_wallet_transactions(
-                user_id, wallet_address[0]
+            curr_wallet_transactions = self.get_transactions_by_wallet_address(
+                wallet_address[0]
             )
             for curr_trans in curr_wallet_transactions:
                 if not res_set.__contains__(curr_trans.transaction_id):
@@ -32,8 +32,8 @@ class TransactionRepository(ITransactionRepository):
 
         return res_list
 
-    def get_wallet_transactions(
-        self, user_id: int, wallet_address: int
+    def get_transactions_by_wallet_address(
+        self, wallet_address: int
     ) -> List[Transaction]:
         res_list: List[Transaction] = []
 
@@ -64,12 +64,12 @@ class TransactionRepository(ITransactionRepository):
 
         return res_list
 
-    def make_transfer(self, user_id: int, trans: Transaction) -> bool:
+    def add(self, transactions: Transaction) -> None:
 
-        from_wallet_address = trans.from_address
-        to_wallet_address = trans.to_address
-        bitcoin_quantity = trans.amount
-        fee = trans.fee
+        from_wallet_address = transactions.from_address
+        to_wallet_address = transactions.to_address
+        bitcoin_quantity = transactions.amount
+        fee = transactions.fee
         add_transaction = (
             "INSERT INTO transaction_table(from_wallet_address, to_wallet_address, bitcoin_quantity, "
             "fee) VALUES(?, ?, ?, ?) "
@@ -78,4 +78,3 @@ class TransactionRepository(ITransactionRepository):
             add_transaction,
             [from_wallet_address, to_wallet_address, bitcoin_quantity, fee],
         )
-        return True
