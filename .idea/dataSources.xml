@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="bitcoin_wallet" uuid="9782ff49-6aa4-4252-b508-968d9399defa">
+    <data-source source="LOCAL" name="bitcoin_wallet" uuid="8e537e64-062a-40ed-a050-b24c4ccddc12">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
@@ -13,9 +13,7 @@
         </library>
       </libraries>
     </data-source>
-
-    <data-source source="LOCAL" name="test" uuid="088cc8f4-09dd-45c2-9bf6-89d6ca9288b4">
-
+    <data-source source="LOCAL" name="test" uuid="01c9166a-1d9b-4838-830f-9f2ff0df1caa">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>

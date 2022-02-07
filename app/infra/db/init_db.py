@@ -8,4 +8,3 @@ cursor = db.cursor()
 cursor.executescript(sql_script)
 db.commit()
 db.close()
-

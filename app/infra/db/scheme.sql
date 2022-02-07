@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS user_table(
 CREATE TABLE IF NOT EXISTS wallet_table (
   wallet_address INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER,
+  balance_btc DOUBLE,
   FOREIGN KEY (user_id) REFERENCES user_table (user_id)
 );
 CREATE TABLE IF NOT EXISTS transaction_table (
