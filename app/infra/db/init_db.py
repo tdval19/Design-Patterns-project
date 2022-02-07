@@ -19,11 +19,10 @@ class InitDb:
 
         create_transaction_table = ''' CREATE TABLE IF NOT EXISTS transaction_table
                                         (transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        from_wallet_address, to_wallet_address, bitcoin_quantity INTEGER,
+                                        from_wallet_address, to_wallet_address, bitcoin_quantity DOUBLE, fee DOUBLE,
                                         FOREIGN KEY (from_wallet_address) REFERENCES wallet_table (wallet_address),
                                         FOREIGN KEY (to_wallet_address) REFERENCES wallet_table (wallet_address))'''
         self.cursor.execute(create_transaction_table)
 
         create_statistics_table = '''CREATE TABLE IF NOT EXISTS statistics_table (variable TEXT, value DOUBLE)'''
         self.cursor.execute(create_statistics_table)
-

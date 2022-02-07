@@ -7,3 +7,4 @@ class Transaction:
     to_address: int
     amount: float
     fee: float = 0
+    transaction_id: int = -1
