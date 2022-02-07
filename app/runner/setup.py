@@ -2,18 +2,20 @@ from fastapi import FastAPI
 
 from app.core.converter.bitcoin_converter import CexBitcoinConverter
 from app.core.facade import BitcoinService
-from app.core.interactors.admin import AdminInteractor
+from app.core.interactors.statistics import StatisticInteractor
 from app.core.interactors.transactions import TransactionsInteractor
 from app.core.interactors.users import UserInteractor
 from app.core.interactors.wallets import WalletInteractor
+from app.infra.db.rep.statistic_repository import SqlStatisticRepository
 from app.infra.fastapi.test import api
 
 
 def setup() -> FastAPI:
     app = FastAPI()
     app.include_router(api)
+    db_name = "bitcoin_wallet.db"
     app.state.core = BitcoinService(
-        AdminInteractor(),
+        StatisticInteractor(SqlStatisticRepository(db_name)),
         WalletInteractor(),
         TransactionsInteractor(),
         UserInteractor(),

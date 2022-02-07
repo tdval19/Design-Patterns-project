@@ -1,11 +1,8 @@
 from dataclasses import dataclass
-from typing import List
 
-from app.core.models.wallet import Wallet
+NO_ID: int = -1
 
 
 @dataclass
 class User:
-    user_id: int
-    wallets: List[Wallet]
-    balance_btc: float
+    user_id: int = NO_ID

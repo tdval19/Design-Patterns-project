@@ -3,11 +3,11 @@ from typing import Optional, List
 
 from app.core.converter.bitcoin_converter import IBitcoinConverter
 from app.core.fee_strategy import IFeeStrategy, StandardFeeStrategy
-from app.core.interactors.admin import AdminInteractor
+from app.core.interactors.statistics import StatisticInteractor
 from app.core.interactors.transactions import TransactionsInteractor
 from app.core.interactors.users import UserInteractor
 from app.core.interactors.wallets import WalletInteractor
-from app.core.models.statistics import Statistics
+from app.core.models.statistic import Statistics
 from app.core.models.transaction import Transaction
 from app.core.models.user import User
 from app.core.models.wallet import Wallet
@@ -15,7 +15,7 @@ from app.core.models.wallet import Wallet
 
 @dataclass
 class BitcoinService:
-    admin_interactor: AdminInteractor
+    admin_interactor: StatisticInteractor
     wallet_interactor: WalletInteractor
     transaction_interactor: TransactionsInteractor
     user_interactor: UserInteractor
