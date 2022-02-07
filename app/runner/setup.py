@@ -7,6 +7,8 @@ from app.core.interactors.transactions import TransactionsInteractor
 from app.core.interactors.users import UserInteractor
 from app.core.interactors.wallets import WalletInteractor
 from app.infra.db.rep.statistic_repository import SqlStatisticRepository
+from app.infra.db.rep.transaction_repository import SqlTransactionRepository
+from app.infra.db.rep.user_repository import SqlUserRepository
 from app.infra.fastapi.test import api
 
 
@@ -17,8 +19,8 @@ def setup() -> FastAPI:
     app.state.core = BitcoinService(
         StatisticInteractor(SqlStatisticRepository(db_name)),
         WalletInteractor(),
-        TransactionsInteractor(),
-        UserInteractor(),
+        TransactionsInteractor(SqlTransactionRepository(db_name)),
+        UserInteractor(SqlUserRepository(db_name)),
         CexBitcoinConverter(),
     )
     return app

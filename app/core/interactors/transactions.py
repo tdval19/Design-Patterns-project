@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import Optional, List
-from app.core.repository import transactions_rep
 from app.core.models.transaction import Transaction
 from app.core.repository.repository_interfaces import ITransactionRepository
 

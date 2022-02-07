@@ -1,22 +1,20 @@
 import sqlite3
 from dataclasses import dataclass
-from typing import List
+from typing import List, Set
 
 from app.core.models.transaction import Transaction
 from app.core.repository.repository_interfaces import ITransactionRepository
 
 
-@dataclass
-class TransactionRepository(ITransactionRepository):
-    db_name: str
-
-    def __init__(self):
+class SqlTransactionRepository(ITransactionRepository):
+    def __init__(self, db_name: str) -> None:
+        self.db_name = db_name
         self.connection = sqlite3.connect(self.db_name)
         self.cursor = self.connection.cursor()
 
     def get_transactions_by_user_id(self, user_id: int) -> List[Transaction]:
         res_list: List[Transaction] = []
-        res_set: set = set()
+        res_set: Set[int] = set()
         get_user_wallets = "SELECT wallet_address FROM wallet_table WHERE user_id = ?"
         self.cursor.execute(get_user_wallets, [user_id])
         user_wallets = self.cursor.fetchall()

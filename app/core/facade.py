@@ -48,7 +48,8 @@ class BitcoinService:
         )
         self.admin_interactor.update_statistics(1, fee)
         transaction.fee = fee
-        return self.transaction_interactor.transfer(user_id, transaction)
+        self.transaction_interactor.transfer(user_id, transaction)
+        return True
 
     # user_interactor
     def create_user(self) -> Optional[User]:
