@@ -9,8 +9,7 @@ def test_should_return_none() -> None:
 
 
 def test_add_get() -> None:
-    tmp_user = rep.add(User(-1))
+    tmp_user = rep.add(User())
     user = rep.get_by_id(tmp_user.user_id)
     assert user is not None
     assert user.user_id == tmp_user.user_id
-

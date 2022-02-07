@@ -1,7 +1,4 @@
 from dataclasses import dataclass
-from typing import List
-
-from app.core.models.transaction import Transaction
 
 
 @dataclass
