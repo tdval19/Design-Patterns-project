@@ -6,4 +6,4 @@ from app.core.models.wallet import Wallet
 
 @dataclass
 class User:
-    user_id: int
+    user_id: int = -1

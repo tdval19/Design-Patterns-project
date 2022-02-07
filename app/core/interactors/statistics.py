@@ -13,4 +13,3 @@ class StatisticInteractor:
 
     def update_statistics(self, num_transactions: int, amount: float) -> None:
         self.statistics_repository.update(num_transactions, amount)
-        

@@ -10,7 +10,7 @@ class IUserRepository(Protocol):
     def get_by_id(self, user_id: int) -> Optional[User]:
         pass
 
-    def add(self, user: User) -> None:
+    def add(self, user: User) -> User:
         pass
 
 
@@ -42,4 +42,3 @@ class IStatisticRepository(Protocol):
 
     def update(self, num_transactions: int, amount: float) -> None:
         pass
-

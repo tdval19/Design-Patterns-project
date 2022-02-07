@@ -6,14 +6,16 @@ from app.core.interactors.statistics import StatisticInteractor
 from app.core.interactors.transactions import TransactionsInteractor
 from app.core.interactors.users import UserInteractor
 from app.core.interactors.wallets import WalletInteractor
+from app.infra.db.rep.statistic_repository import SqlStatisticRepository
 from app.infra.fastapi.test import api
 
 
 def setup() -> FastAPI:
     app = FastAPI()
     app.include_router(api)
+    db_name = "bitcoin_wallet.db"
     app.state.core = BitcoinService(
-        StatisticInteractor(),
+        StatisticInteractor(SqlStatisticRepository(db_name)),
         WalletInteractor(),
         TransactionsInteractor(),
         UserInteractor(),
