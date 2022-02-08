@@ -17,4 +17,3 @@ class SqliteDbInitializer:
 
     def get_connection(self) -> Connection:
         return self.con
-
