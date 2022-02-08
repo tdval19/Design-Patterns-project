@@ -19,3 +19,4 @@ CREATE TABLE IF NOT EXISTS transaction_table (
 CREATE TABLE IF NOT EXISTS statistics_table (
   total_profit DOUBLE, total_transactions INTEGER
 );
+INSERT INTO statistics_table VALUES (0, 0)

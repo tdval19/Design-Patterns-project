@@ -8,4 +8,3 @@ class Wallet:
     user_id: int
     balance_btc: float
     wallet_id: int = NO_ID
-

@@ -1,7 +1,12 @@
+from pathlib import Path
+
 from app.core.models.user import User
+from app.infra.db.init_db import SqliteDbInitializer
 from app.infra.db.rep.user_repository import SqlUserRepository
 
-rep = SqlUserRepository("test.db")
+path = Path(__file__).parent / "../infra/db/scheme.sql"
+db = SqliteDbInitializer(path, ":memory:")
+rep = SqlUserRepository(db.get_connection())
 
 
 def test_should_return_none() -> None:

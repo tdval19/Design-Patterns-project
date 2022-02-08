@@ -1,10 +1,14 @@
 import random
+from pathlib import Path
 
 import pytest
 
+from app.infra.db.init_db import SqliteDbInitializer
 from app.infra.db.rep.statistic_repository import SqlStatisticRepository
 
-rep = SqlStatisticRepository("test.db")
+path = Path(__file__).parent / "../infra/db/scheme.sql"
+db = SqliteDbInitializer(path, ":memory:")
+rep = SqlStatisticRepository(db.get_connection())
 
 
 def test_should_update_values() -> None:

@@ -1,23 +1,23 @@
 import sqlite3
 from dataclasses import dataclass
+from sqlite3 import Connection
 from typing import List, Set
 
 from app.core.models.transaction import Transaction
 from app.core.repository.repository_interfaces import ITransactionRepository
 
 
+@dataclass
 class SqlTransactionRepository(ITransactionRepository):
-    def __init__(self, db_name: str) -> None:
-        self.db_name = db_name
-        self.connection = sqlite3.connect(self.db_name)
-        self.cursor = self.connection.cursor()
+    con: Connection
 
     def get_transactions_by_user_id(self, user_id: int) -> List[Transaction]:
         res_list: List[Transaction] = []
         res_set: Set[int] = set()
         get_user_wallets = "SELECT wallet_address FROM wallet_table WHERE user_id = ?"
-        self.cursor.execute(get_user_wallets, [user_id])
-        user_wallets = self.cursor.fetchall()
+        cursor = self.con.cursor()
+        cursor.execute(get_user_wallets, [user_id])
+        user_wallets = cursor.fetchall()
 
         for wallet_address in user_wallets:
             curr_wallet_transactions = self.get_transactions_by_wallet_address(
@@ -27,7 +27,7 @@ class SqlTransactionRepository(ITransactionRepository):
                 if not res_set.__contains__(curr_trans.transaction_id):
                     res_list.append(curr_trans)
                     res_set.add(curr_trans.transaction_id)
-
+        cursor.close()
         return res_list
 
     def get_transactions_by_wallet_address(
@@ -39,8 +39,9 @@ class SqlTransactionRepository(ITransactionRepository):
             "SELECT from_wallet_address, to_wallet_address, bitcoin_quantity,"
             " fee, transaction_id  FROM transaction_table WHERE from_wallet_address = ? "
         )
-        self.cursor.execute(get_from_wallet_address, [wallet_address])
-        from_wallet = self.cursor.fetchall()
+        cursor = self.con.cursor()
+        cursor.execute(get_from_wallet_address, [wallet_address])
+        from_wallet = cursor.fetchall()
 
         for trans in from_wallet:
             res_list.append(
@@ -52,8 +53,8 @@ class SqlTransactionRepository(ITransactionRepository):
             " FROM transaction_table WHERE to_wallet_address = ? AND "
             " to_wallet_address != from_wallet_address"
         )
-        self.cursor.execute(get_to_wallet_address, [wallet_address])
-        to_wallet = self.cursor.fetchall()
+        cursor.execute(get_to_wallet_address, [wallet_address])
+        to_wallet = cursor.fetchall()
 
         for trans in to_wallet:
             res_list.append(
@@ -72,7 +73,10 @@ class SqlTransactionRepository(ITransactionRepository):
             "INSERT INTO transaction_table(from_wallet_address, to_wallet_address, bitcoin_quantity, "
             "fee) VALUES(?, ?, ?, ?) "
         )
-        self.cursor.execute(
+        cursor = self.con.cursor()
+        cursor.execute(
             add_transaction,
             [from_wallet_address, to_wallet_address, bitcoin_quantity, fee],
         )
+        self.con.commit()
+        cursor.close()
