@@ -8,8 +8,10 @@ from app.core.repository.repository_interfaces import IStatisticRepository
 class StatisticInteractor:
     statistics_repository: IStatisticRepository
 
-    def get_statistics(self, admin_key: int) -> Optional[Statistics]:
+    def get_statistics(self) -> Statistics:
         return self.statistics_repository.get()
 
-    def update_statistics(self, num_transactions: int, amount: float) -> None:
-        self.statistics_repository.update(num_transactions, amount)
+    def update_statistics(
+        self, change_in_num_transactions: int, change_in_amount: float
+    ) -> None:
+        self.statistics_repository.update(change_in_num_transactions, change_in_amount)

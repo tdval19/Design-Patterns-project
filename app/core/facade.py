@@ -15,7 +15,7 @@ from app.core.models.wallet import Wallet
 
 @dataclass
 class BitcoinService:
-    admin_interactor: StatisticInteractor
+    statistic_interactor: StatisticInteractor
     wallet_interactor: WalletInteractor
     transaction_interactor: TransactionsInteractor
     user_interactor: UserInteractor
@@ -46,7 +46,7 @@ class BitcoinService:
         fee = self.fee_strategy.get_fee(
             from_wallet.user_id, to_wallet.user_id, transaction.amount
         )
-        self.admin_interactor.update_statistics(1, fee)
+        self.statistic_interactor.update_statistics(1, fee)
         transaction.fee = fee
         self.transaction_interactor.transfer(user_id, transaction)
         return True
@@ -56,8 +56,8 @@ class BitcoinService:
         return self.user_interactor.create_user()
 
     # admin_interactor
-    def get_statistics(self, admin_key: int) -> Optional[Statistics]:
-        return self.admin_interactor.get_statistics(admin_key)
+    def get_statistics(self, key: str) -> Statistics:
+        return self.statistic_interactor.get_statistics()
 
     # bitcoin_converter
     def convert_bitcoin_to(self, currency: str) -> Optional[float]:
