@@ -8,11 +8,12 @@ from app.core.repository.repository_interfaces import IWalletRepository
 
 @dataclass
 class SqlWalletRepository(IWalletRepository):
-    db_name: str
+    def __init__(self, db_name: str) -> None:
+        self.db_name = db_name
 
     def get_by_address(self, wallet_address: int) -> Optional[Wallet]:
         con = sqlite3.connect(self.db_name)
-        statement = "SELECT wallet_address FROM  wallet_table WHERE wallet_address = ?"
+        statement = "SELECT user_id, balance_btc, wallet_address FROM  wallet_table WHERE wallet_address = ?"
         cursor = con.cursor()
         cursor.execute(statement, (wallet_address,))
         rows = cursor.fetchall()
@@ -21,9 +22,9 @@ class SqlWalletRepository(IWalletRepository):
         con.close()
         if len(rows) == 0:
             return None
-        return Wallet(rows[0][0])
+        return Wallet(rows[0][0], rows[0][1], rows[0][2])
 
-    def update_wallet_balance(self, wallet_address: int,  balance_btc: float) -> None:
+    def update_wallet_balance(self, wallet_address: int, balance_btc: float) -> None:
         con = sqlite3.connect(self.db_name)
         statement = "UPDATE wallet_table SET balance_btc=(?) WHERE wallet_address=?;"
         cursor = con.cursor()
@@ -36,7 +37,9 @@ class SqlWalletRepository(IWalletRepository):
         con = sqlite3.connect(self.db_name)
         statement = "INSERT INTO wallet_table(wallet_address, user_id, balance_btc) VALUES (?, ?, ?)"
         cursor = con.cursor()
-        cursor.execute(statement, (wallet.wallet_id, wallet.user_id, wallet.balance_btc))
+        cursor.execute(
+            statement, (wallet.wallet_id, wallet.user_id, wallet.balance_btc)
+        )
         con.commit()
         cursor.close()
         con.close()
