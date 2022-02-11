@@ -1,4 +1,3 @@
-import sqlite3
 from dataclasses import dataclass
 from sqlite3 import Connection
 from typing import Optional, List
@@ -30,23 +29,23 @@ class SqlWalletRepository(IWalletRepository):
         cursor.close()
 
     def add(self, wallet: Wallet) -> Wallet:
-        statement = "INSERT INTO wallet_table(wallet_address, user_id, balance_btc) VALUES (?, ?, ?)"
+        statement = "INSERT INTO wallet_table(user_id, balance_btc) VALUES (?, ?)"
         cursor = self.con.cursor()
         cursor.execute(
-            statement, (wallet.wallet_id, wallet.user_id, wallet.balance_btc)
+            statement, (wallet.user_id, wallet.balance_btc)
         )
         self.con.commit()
-        cursor.close()
         statement = "SELECT last_insert_rowid()"
         cursor.execute(statement)
         rows = cursor.fetchall()
         self.con.commit()
         cursor.close()
         wallet_address = rows[0][0]
-        return Wallet(wallet.user_id, 1.0, wallet_address)
+        print(wallet_address)
+        return Wallet(wallet.user_id, wallet.balance_btc, wallet_address)
 
     def get_wallets_by_user_id(self, user_id: int) -> List[Wallet]:
-        statement = "SELECT balance_btc, wallet_address FROM wallet_table where user_id = ?"
+        statement = "SELECT balance_btc, wallet_address FROM wallet_table where user_id = ?";
         cursor = self.con.cursor()
         cursor.execute(statement, (user_id,))
         wallets = cursor.fetchall()
