@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from typing import Optional, List
-
 from app.core.converter.bitcoin_converter import IBitcoinConverter
 from app.core.fee_strategy import IFeeStrategy, StandardFeeStrategy
 from app.core.interactors.statistics import StatisticInteractor
@@ -24,9 +23,9 @@ class BitcoinService:
 
     # wallet_interactor
     def get_wallet(self, user_id: int, address: int) -> Optional[Wallet]:
-        return self.wallet_interactor.get_wallet(user_id, address)
+        return self.wallet_interactor.get_wallet(address)
 
-    def create_wallet(self, user_id: int) -> Optional[Wallet]:
+    def create_wallet(self, user_id: int) -> Wallet:
         return self.wallet_interactor.create_wallet(user_id)
 
     # transactions_interactor
@@ -39,8 +38,8 @@ class BitcoinService:
         return self.transaction_interactor.get_user_transactions(user_id)
 
     def make_transaction(self, user_id: int, transaction: Transaction) -> bool:
-        to_wallet = self.wallet_interactor.get_wallet(0, transaction.to_address)
-        from_wallet = self.wallet_interactor.get_wallet(0, transaction.from_address)
+        to_wallet = self.wallet_interactor.get_wallet(transaction.to_address)
+        from_wallet = self.wallet_interactor.get_wallet(transaction.from_address)
         if to_wallet is None or from_wallet is None:
             return False
         fee = self.fee_strategy.get_fee(
@@ -52,8 +51,11 @@ class BitcoinService:
         return True
 
     # user_interactor
-    def create_user(self) -> Optional[User]:
+    def create_user(self) -> User:
         return self.user_interactor.create_user()
+
+    def get_user(self, user_id: int) -> Optional[User]:
+        return self.user_interactor.get_user(user_id)
 
     # admin_interactor
     def get_statistics(self, key: str) -> Statistics:

@@ -9,5 +9,8 @@ from app.core.repository.repository_interfaces import IUserRepository
 class UserInteractor:
     repository: IUserRepository
 
-    def create_user(self) -> Optional[User]:
-        pass
+    def create_user(self) -> User:
+        return self.repository.add(User())
+
+    def get_user(self, user_id: int) -> Optional[User]:
+        return self.repository.get_by_id(user_id)

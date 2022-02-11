@@ -12,6 +12,7 @@ from app.infra.db.init_db import SqliteDbInitializer
 from app.infra.db.rep.statistic_repository import SqlStatisticRepository
 from app.infra.db.rep.transaction_repository import SqlTransactionRepository
 from app.infra.db.rep.user_repository import SqlUserRepository
+from app.infra.db.rep.wallet_repository import SqlWalletRepository
 from app.infra.fastapi.test import api
 
 
@@ -25,7 +26,7 @@ def setup() -> FastAPI:
 
     app.state.core = BitcoinService(
         StatisticInteractor(SqlStatisticRepository(db.get_connection())),
-        WalletInteractor(),
+        WalletInteractor(SqlWalletRepository(db.get_connection())),
         TransactionsInteractor(SqlTransactionRepository(db.get_connection())),
         UserInteractor(SqlUserRepository(db.get_connection())),
         CexBitcoinConverter(),

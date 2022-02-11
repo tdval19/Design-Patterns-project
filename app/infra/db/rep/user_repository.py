@@ -1,13 +1,13 @@
-import sqlite3
 from dataclasses import dataclass
 from sqlite3 import Connection
 from typing import Optional
 
 from app.core.models.user import User
+from app.core.repository.repository_interfaces import IUserRepository
 
 
 @dataclass
-class SqlUserRepository:
+class SqlUserRepository(IUserRepository):
     con: Connection
 
     def get_by_id(self, user_id: int) -> Optional[User]:

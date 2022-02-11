@@ -1,7 +1,7 @@
 import sqlite3
 from dataclasses import dataclass
 from sqlite3 import Connection
-from typing import Optional
+from typing import Optional, List
 
 from app.core.models.wallet import Wallet
 from app.core.repository.repository_interfaces import IWalletRepository
@@ -37,3 +37,6 @@ class SqlWalletRepository(IWalletRepository):
         )
         self.con.commit()
         cursor.close()
+
+    def get_wallets_by_user_id(self, user_id: int) -> List[Wallet]:
+        pass
