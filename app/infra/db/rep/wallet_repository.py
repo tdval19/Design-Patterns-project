@@ -46,7 +46,7 @@ class SqlWalletRepository(IWalletRepository):
         return Wallet(wallet.user_id, 1.0, wallet_address)
 
     def get_wallets_by_user_id(self, user_id: int) -> List[Wallet]:
-        statement = "SELECT balance_btc, wallet_address FROM wallet_table where user_id = ?";
+        statement = "SELECT balance_btc, wallet_address FROM wallet_table where user_id = ?"
         cursor = self.con.cursor()
         cursor.execute(statement, (user_id,))
         wallets = cursor.fetchall()
