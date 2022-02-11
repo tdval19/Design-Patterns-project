@@ -24,7 +24,7 @@ class IWalletRepository(Protocol):
     def update_wallet_balance(self, wallet_address: int, balance_btc: float) -> None:
         pass
 
-    def add(self, wallet: Wallet) -> None:
+    def add(self, wallet: Wallet) -> Wallet:
         pass
 
 
