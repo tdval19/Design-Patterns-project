@@ -10,7 +10,7 @@ class SqliteDbInitializer:
         with open(script_path, "r") as sql_file:
             sql_script = sql_file.read()
 
-        self.con = sqlite3.connect(db_path)
+        self.con = sqlite3.connect(db_path, check_same_thread=False)
         cursor = self.con.cursor()
         cursor.executescript(sql_script)
         self.con.commit()

@@ -9,34 +9,25 @@ from app.core.repository.repository_interfaces import IWalletRepository
 class WalletInteractor:
     repository: IWalletRepository
 
-    def get_wallet(self, address: int) -> Optional[Wallet]:
+    def get_wallet(self, address: int) -> Wallet:
         result_wallet = self.repository.get_by_address(address)
         if result_wallet is None:
-            raise WalletNotFound(address)
+            raise WalletNotFoundException(address)
         return result_wallet
 
     def create_wallet(self, user_id: int) -> Wallet:
         user_wallets = self.repository.get_wallets_by_user_id(user_id)
         if len(user_wallets) >= 3:
-            raise UserRanOutOfWalletLimit
+            raise UserReachedWalletLimitException(user_id)
         add_wallet = Wallet(user_id, 1.0)
         return self.repository.add(add_wallet)
 
 
-class UserRanOutOfWalletLimit(Exception):
-
+class UserReachedWalletLimitException(Exception):
     def __init__(self, user_id: int):
-        self.message = "User with ID ", user_id, " can not have more than three wallets "
-        super().__init__(self.message)
-
-    def __str__(self):
-        return f'{self.message}'
+        self.message = "User with ID {} reached wallet limit".format(user_id)
 
 
-class WalletNotFound(Exception):
-
+class WalletNotFoundException(Exception):
     def __init__(self, address: int):
-        self.message = "Wallet with address ", address, " not found"
-
-    def __str__(self):
-        return f'{self.message}'
+        self.message = "Wallet with address {} not found".format(address)

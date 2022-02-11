@@ -10,26 +10,14 @@ class SqlStatisticRepository(IStatisticRepository):
     con: Connection
 
     def get(self) -> Statistics:
-        statement = "SELECT * FROM  statistics_table"
+        statement = "SELECT fee FROM transaction_table"
         cursor = self.con.cursor()
         cursor.execute(statement)
         rows = cursor.fetchall()
         cursor.close()
-        total_profit = rows[0][0]
-        total_transactions = rows[0][1]
+        total_transactions = 0
+        total_profit = 0
+        for row in rows:
+            total_transactions += 1
+            total_profit += row[0]
         return Statistics(total_transactions, total_profit)
-
-    def update(self, num_transactions: int, amount: float) -> None:
-        old_stats = self.get()
-        old_stats.num_of_transactions += num_transactions
-        old_stats.total_profit += amount
-
-        cursor = self.con.cursor()
-        statement = (
-            "UPDATE statistics_table SET total_profit = ?, total_transactions = ?"
-        )
-        cursor.execute(
-            statement, (old_stats.total_profit, old_stats.num_of_transactions)
-        )
-        self.con.commit()
-        cursor.close()

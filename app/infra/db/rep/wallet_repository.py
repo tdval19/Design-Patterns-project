@@ -31,9 +31,7 @@ class SqlWalletRepository(IWalletRepository):
     def add(self, wallet: Wallet) -> Wallet:
         statement = "INSERT INTO wallet_table(user_id, balance_btc) VALUES (?, ?)"
         cursor = self.con.cursor()
-        cursor.execute(
-            statement, (wallet.user_id, wallet.balance_btc)
-        )
+        cursor.execute(statement, (wallet.user_id, wallet.balance_btc))
         self.con.commit()
         statement = "SELECT last_insert_rowid()"
         cursor.execute(statement)
@@ -45,7 +43,9 @@ class SqlWalletRepository(IWalletRepository):
         return Wallet(wallet.user_id, wallet.balance_btc, wallet_address)
 
     def get_wallets_by_user_id(self, user_id: int) -> List[Wallet]:
-        statement = "SELECT balance_btc, wallet_address FROM wallet_table where user_id = ?";
+        statement = (
+            "SELECT balance_btc, wallet_address FROM wallet_table where user_id = ?"
+        )
         cursor = self.con.cursor()
         cursor.execute(statement, (user_id,))
         wallets = cursor.fetchall()

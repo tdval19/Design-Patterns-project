@@ -15,7 +15,9 @@ def repository(get_db_script_path: Path) -> SqlTransactionRepository:
 
 
 class TestSqlTransactionRepository:
-    def test_add_get_by_wallet_different_account(self, repository: SqlTransactionRepository) -> None:
+    def test_add_get_by_wallet_different_account(
+        self, repository: SqlTransactionRepository
+    ) -> None:
         transaction = Transaction(1, 2, 1.00, 1.5, 1)
         repository.add(transaction)
         transaction_list_from = repository.get_transactions_by_wallet_address(1)
@@ -23,14 +25,18 @@ class TestSqlTransactionRepository:
         assert len(transaction_list_from) == len(transaction_list_to) == 1
         assert transaction_list_from[0] == transaction_list_to[0] == transaction
 
-    def test_add_get_by_wallet_same_account(self, repository: SqlTransactionRepository) -> None:
+    def test_add_get_by_wallet_same_account(
+        self, repository: SqlTransactionRepository
+    ) -> None:
         transaction = Transaction(1, 1, 500, 2.00, 1)
         repository.add(transaction)
         transaction_list = repository.get_transactions_by_wallet_address(1)
         assert len(transaction_list) == 1
         assert transaction_list[0] == transaction
 
-    def test_add_get_by_wallet_multiple_transactions(self, repository: SqlTransactionRepository) -> None:
+    def test_add_get_by_wallet_multiple_transactions(
+        self, repository: SqlTransactionRepository
+    ) -> None:
         transaction_one = Transaction(1, 2, 1.00, 1.5, 1)
         transaction_two = Transaction(1, 1, 500, 2.00, 2)
         transaction_three = Transaction(2, 1, 666, 5.00, 3)

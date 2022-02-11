@@ -14,11 +14,10 @@ class UserInteractor:
     def get_user(self, user_id: int) -> User:
         user = self.repository.get_by_id(user_id)
         if user is None:
-            raise NoUserFoundException(user_id)
+            raise UserNotFoundException(user_id)
         return user
 
 
-class NoUserFoundException(Exception):
+class UserNotFoundException(Exception):
     def __init__(self, user_id: int):
-        msg = "User with id: {} doesn't exist".format(user_id)
-        super().__init__(msg)
+        self.message = "User with id: {} doesn't exist".format(user_id)
