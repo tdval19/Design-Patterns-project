@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 from app.core.models.user import User
 from app.core.repository.repository_interfaces import IUserRepository
@@ -15,7 +14,7 @@ class UserInteractor:
     def get_user(self, user_id: int) -> User:
         user = self.repository.get_by_id(user_id)
         if user is None:
-            raise NoUserFoundException
+            raise NoUserFoundException(user_id)
         return user
 
 
