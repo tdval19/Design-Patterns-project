@@ -1,5 +1,4 @@
 import sqlite3
-from dataclasses import dataclass
 from typing import List, Set
 
 from app.core.models.transaction import Transaction
