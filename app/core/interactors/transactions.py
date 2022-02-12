@@ -30,7 +30,8 @@ class TransactionsInteractor:
         if from_wallet.balance_btc < transaction.amount + fee:
             raise NotEnoughBitcoinsException(from_wallet.wallet_address)
         self.wallet_repository.update_wallet_balance(
-            from_wallet.wallet_address, from_wallet.balance_btc - fee - transaction.amount
+            from_wallet.wallet_address,
+            from_wallet.balance_btc - fee - transaction.amount,
         )
         self.wallet_repository.update_wallet_balance(
             to_wallet.wallet_address, to_wallet.balance_btc + transaction.amount

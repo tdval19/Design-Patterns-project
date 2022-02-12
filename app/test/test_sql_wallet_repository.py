@@ -15,6 +15,9 @@ def repository(get_db_script_path: Path) -> SqlWalletRepository:
 
 
 class TestSqlWalletRepository:
+    def test_empty_db(self, repository: SqlWalletRepository) -> None:
+        assert repository.get_by_address(1) is None
+
     def test_add_get_by_address(self, repository: SqlWalletRepository) -> None:
         wallet = Wallet(1, 5.12)
         added_wallet = repository.add(wallet)
@@ -41,15 +44,15 @@ class TestSqlWalletRepository:
 
         first_added = repository.add(wallet1)
         user_wallets1 = repository.get_wallets_by_user_id(1)
-        assert(user_wallets1[0] == first_added)
+        assert user_wallets1[0] == first_added
 
         second_added = repository.add(wallet2)
         user_wallets2 = repository.get_wallets_by_user_id(1)
-        assert (user_wallets2[0] == first_added)
-        assert (user_wallets2[1] == second_added)
+        assert user_wallets2[0] == first_added
+        assert user_wallets2[1] == second_added
 
         third_added = repository.add(wallet3)
         user_wallets3 = repository.get_wallets_by_user_id(1)
-        assert (user_wallets3[0] == first_added)
-        assert (user_wallets3[1] == second_added)
-        assert (user_wallets3[2] == third_added)
+        assert user_wallets3[0] == first_added
+        assert user_wallets3[1] == second_added
+        assert user_wallets3[2] == third_added
