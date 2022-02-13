@@ -1,5 +1,5 @@
 import uvicorn
 
-from app.runner.asgi import test_app
+from app.runner.asgi import bitcoin_app
 
-uvicorn.run(test_app, host="0.0.0.0", port=8000, debug=True)
+uvicorn.run(bitcoin_app, host="0.0.0.0", port=8000, debug=True)

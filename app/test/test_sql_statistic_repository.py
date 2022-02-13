@@ -26,7 +26,9 @@ def transaction_repository(db_fixture: Connection) -> SqlTransactionRepository:
 
 
 class TestSqlStatisticRepository:
-    def test_statistic_repository_empty(self, repository: SqlStatisticRepository) -> None:
+    def test_statistic_repository_empty(
+        self, repository: SqlStatisticRepository
+    ) -> None:
         repository.get().total_profit = 0
         repository.get().num_of_transactions = 0
 

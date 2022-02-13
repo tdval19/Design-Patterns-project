@@ -1,3 +1,3 @@
-from app.runner.setup import setup
+from app.runner.setup import get_api
 
-test_app = setup()
+bitcoin_app = get_api()

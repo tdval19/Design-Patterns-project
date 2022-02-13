@@ -36,8 +36,19 @@ from app.infra.fastapi.api_exception_handlers import (
     user_reached_wallet_limit_exception_handler,
 )
 
+real_db_path = Path(__file__).parent / "../infra/db/bitcoin_wallet.db"
+script_path = Path(__file__).parent / "../infra/db/scheme.sql"
 
-def setup() -> FastAPI:
+
+def get_api() -> FastAPI:
+    return setup(db_path=str(real_db_path), script=script_path)
+
+
+def setup_test_api() -> FastAPI:
+    return setup(db_path=":memory:", script=script_path)
+
+
+def setup(db_path: str, script: Path) -> FastAPI:
     app = FastAPI()
     app.include_router(api)
     app.add_exception_handler(UserNotFoundException, user_not_found_exception_handler)
@@ -53,9 +64,7 @@ def setup() -> FastAPI:
         UserReachedWalletLimitException, user_reached_wallet_limit_exception_handler
     )
 
-    db_path = Path(__file__).parent / "../infra/db/bitcoin_wallet.db"
-    script_path = Path(__file__).parent / "../infra/db/scheme.sql"
-    db = SqliteDbInitializer(script_path, str(db_path))
+    db = SqliteDbInitializer(script, str(db_path))
     wallet_rep = SqlWalletRepository(db.get_connection())
     statistics_rep = SqlStatisticRepository(db.get_connection())
     transaction_rep = SqlTransactionRepository(db.get_connection())
