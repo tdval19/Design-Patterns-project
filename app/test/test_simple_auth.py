@@ -1,4 +1,3 @@
-import sqlite3
 from sqlite3 import Connection
 
 from app.core.interactors.auth import SimpleAuth, IUserAuth, IKeyEncoder
@@ -37,11 +36,13 @@ def auth(user_repository: IUserRepository, encoder: IKeyEncoder) -> IUserAuth:
 
 
 class TestSimpleAuth:
-    def test_generate_key(self, auth: IUserAuth):
+    def test_generate_key(self, auth: IUserAuth) -> None:
         credentials = UserCredentials(1)
         assert isinstance(auth.generate_key(credentials), str)
 
-    def test_authorise_user(self, user_repository: IUserRepository, auth: IUserAuth):
+    def test_authorise_user(
+        self, user_repository: IUserRepository, auth: IUserAuth
+    ) -> None:
         with pytest.raises(NotAuthorizedException):
             auth.authorize_user(None)
         with pytest.raises(NotAuthorizedException):
@@ -55,7 +56,7 @@ class TestSimpleAuth:
         key = auth.generate_key(credentials)
         assert auth.authorize_user(key) == credentials
 
-    def test_user_has_permission(self, auth: IUserAuth):
+    def test_user_has_permission(self, auth: IUserAuth) -> None:
         with pytest.raises(NotAuthorizedException):
             auth.user_has_permission(None, 5)
 
@@ -65,7 +66,9 @@ class TestSimpleAuth:
         with pytest.raises(ForbiddenException):
             auth.user_has_permission("KEY6", 7)
 
-    def test_authorise_admin(self, user_repository: IUserRepository, auth: IUserAuth):
+    def test_authorise_admin(
+        self, user_repository: IUserRepository, auth: IUserAuth
+    ) -> None:
         # test key is non
         with pytest.raises(NotAuthorizedException):
             auth.authorize_admin(None)
