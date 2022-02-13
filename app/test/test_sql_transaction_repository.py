@@ -1,17 +1,30 @@
 from pathlib import Path
+from sqlite3 import Connection
 
 import pytest
 
 from app.core.models.transaction import Transaction
+from app.core.models.wallet import Wallet
 from app.infra.db.init_db import SqliteDbInitializer
 from app.infra.db.rep.transaction_repository import SqlTransactionRepository
+from app.infra.db.rep.wallet_repository import SqlWalletRepository
 from app.test.db_path_fixture import get_db_script_path
 
 
 @pytest.fixture
-def repository(get_db_script_path: Path) -> SqlTransactionRepository:
+def db_fixture(get_db_script_path: Path) -> Connection:
     db = SqliteDbInitializer(get_db_script_path, ":memory:")
-    return SqlTransactionRepository(db.get_connection())
+    return db.get_connection()
+
+
+@pytest.fixture
+def repository(db_fixture: Connection) -> SqlTransactionRepository:
+    return SqlTransactionRepository(db_fixture)
+
+
+@pytest.fixture
+def wallet_repository(db_fixture: Connection) -> SqlWalletRepository:
+    return SqlWalletRepository(db_fixture)
 
 
 class TestSqlTransactionRepository:
@@ -53,10 +66,61 @@ class TestSqlTransactionRepository:
         assert len(transaction_list_two) == 2
         assert len(transaction_list_three) == 1
         assert len(transaction_list_four) == 1
-        assert transaction_list_one[0] == transaction_one
-        assert transaction_list_one[1] == transaction_two
-        assert transaction_list_one[2] == transaction_three
-        assert transaction_list_two[0] == transaction_three
-        assert transaction_list_two[1] == transaction_one
-        assert transaction_list_three[0] == transaction_four
-        assert transaction_list_four[0] == transaction_four
+        assert (
+            transaction_list_one.count(transaction_one) > 0
+            and transaction_list_one.count(transaction_two) > 0
+            and transaction_list_one.count(transaction_three) > 0
+        )
+        assert (
+            transaction_list_two.count(transaction_one) > 0
+            and transaction_list_one.count(transaction_three) > 0
+        )
+        assert transaction_list_three.count(transaction_four) > 0
+        assert transaction_list_four.count(transaction_four) > 0
+
+    def test_get_by_user_id_single(
+        self,
+        repository: SqlTransactionRepository,
+        wallet_repository: SqlWalletRepository,
+    ) -> None:
+        from_wallet = wallet_repository.add(Wallet(1, 5.00))
+        to_wallet = wallet_repository.add(Wallet(2, 7.00))
+        transaction = Transaction(
+            from_wallet.wallet_address, to_wallet.wallet_address, 2.00, 0.5, 1
+        )
+        repository.add(transaction)
+        from_user_trans = repository.get_transactions_by_user_id(from_wallet.user_id)
+        to_user_trans = repository.get_transactions_by_user_id(to_wallet.user_id)
+        assert from_user_trans[0] == to_user_trans[0] == transaction
+
+    def test_get_by_user_id_multiple(
+        self,
+        repository: SqlTransactionRepository,
+        wallet_repository: SqlWalletRepository,
+    ) -> None:
+        from_wallet = wallet_repository.add(Wallet(1, 100))
+        to_wallet = wallet_repository.add(Wallet(2, 50.00))
+        transaction_one = Transaction(
+            from_wallet.wallet_address, to_wallet.wallet_address, 10.50, 0.5, 1
+        )
+        transaction_two = Transaction(
+            to_wallet.wallet_address, from_wallet.wallet_address, 20.00, 0.5, 2
+        )
+        transaction_three = Transaction(
+            from_wallet.wallet_address, to_wallet.wallet_address, 5.50, 3.00, 3
+        )
+        repository.add(transaction_one)
+        repository.add(transaction_two)
+        repository.add(transaction_three)
+        from_user_trans = repository.get_transactions_by_user_id(from_wallet.user_id)
+        to_user_trans = repository.get_transactions_by_user_id(to_wallet.user_id)
+        assert (
+            from_user_trans.count(transaction_one) > 0
+            and from_user_trans.count(transaction_two) > 0
+            and from_user_trans.count(transaction_three) > 0
+        )
+        assert (
+            to_user_trans.count(transaction_one) > 0
+            and from_user_trans.count(transaction_two) > 0
+            and from_user_trans.count(transaction_three) > 0
+        )

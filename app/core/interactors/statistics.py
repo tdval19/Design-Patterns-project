@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 from app.core.models.statistic import Statistics
 from app.core.repository.repository_interfaces import IStatisticRepository
 
