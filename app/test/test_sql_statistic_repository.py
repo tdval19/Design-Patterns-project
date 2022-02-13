@@ -26,17 +26,23 @@ def transaction_repository(db_fixture: Connection) -> SqlTransactionRepository:
 
 
 class TestSqlStatisticRepository:
-    def test_statistic_repository_empty(self, repository: SqlStatisticRepository):
+    def test_statistic_repository_empty(self, repository: SqlStatisticRepository) -> None:
         repository.get().total_profit = 0
         repository.get().num_of_transactions = 0
 
-    def test_statistic_repository_get(self, repository: SqlStatisticRepository,
-                                      transaction_repository: SqlTransactionRepository):
+    def test_statistic_repository_get(
+        self,
+        repository: SqlStatisticRepository,
+        transaction_repository: SqlTransactionRepository,
+    ) -> None:
         transaction_one = Transaction(1, 2, 5.00, 1.00, 1)
         transaction_two = Transaction(3, 4, 10.50, 2.00, 2)
         transaction_three = Transaction(1, 3, 3.46, 3.50, 3)
         transaction_repository.add(transaction_one)
         transaction_repository.add(transaction_two)
+        stats = repository.get()
+        assert stats.total_profit == 3.0
+        assert stats.num_of_transactions == 2
         transaction_repository.add(transaction_three)
         stats = repository.get()
         assert stats.num_of_transactions == 3
