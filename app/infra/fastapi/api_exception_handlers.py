@@ -63,12 +63,3 @@ def user_reached_wallet_limit_exception_handler(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"message": exc.message},
     )
-
-
-def illegal_amount_exception_handler(
-    request: Request, exc: ValueError
-) -> JSONResponse:
-    return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={"message": exc.args},
-    )

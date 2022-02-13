@@ -1,5 +1,6 @@
 import sqlite3
 from pathlib import Path
+from sqlite3 import Connection
 
 import pytest
 from app.core.interactors.users import UserInteractor
@@ -17,21 +18,20 @@ def connection(get_db_script_path: Path) -> sqlite3.Connection:
 
 
 class TestUserInteractor:
-
-    def test_add_user(self, connection: sqlite3.Connection):
+    def test_add_user(self, connection: Connection) -> None:
         user_repository = SqlUserRepository(connection)
         user_interactor = UserInteractor(user_repository)
         new_user = user_interactor.create_user()
         get_user = user_repository.get_by_id(new_user.user_id)
         assert new_user == get_user
 
-    def test_get_user(self, connection):
+    def test_get_user(self, connection: Connection) -> None:
         user_repository = SqlUserRepository(connection)
         user_interactor = UserInteractor(user_repository)
         new_user = user_repository.add(User())
         assert new_user == user_interactor.get_user(new_user.user_id)
 
-    def test_get_user_none(self, connection: sqlite3.Connection):
+    def test_get_user_none(self, connection: Connection) -> None:
         user_repository = SqlUserRepository(connection)
         user_interactor = UserInteractor(user_repository)
 
