@@ -1,6 +1,5 @@
 import sqlite3
 from pathlib import Path
-from app.test.db_path_fixture import get_db_script_path
 import pytest
 
 from app.core.interactors.wallets import WalletInteractor, UserReachedWalletLimitException, WalletNotFoundException
@@ -36,13 +35,12 @@ class TestWalletInteractor:
         wallet_repository = SqlWalletRepository(connection)
         wallet_interactor = WalletInteractor(wallet_repository)
         for i in range(0, 3):
-            new_wallet = wallet_interactor.create_wallet(1)
+            wallet_interactor.create_wallet(1)
         with pytest.raises(UserReachedWalletLimitException):
-            new_wallet = wallet_interactor.create_wallet(1)
+            wallet_interactor.create_wallet(1)
 
     def test_undefined_wallet(self, connection: sqlite3.Connection) -> None:
         wallet_repository = SqlWalletRepository(connection)
         wallet_interactor = WalletInteractor(wallet_repository)
         with pytest.raises(WalletNotFoundException):
-            get_wallet = wallet_interactor.get_wallet(-1)
-
+            wallet_interactor.get_wallet(-1)

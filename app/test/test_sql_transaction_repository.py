@@ -8,7 +8,6 @@ from app.core.models.wallet import Wallet
 from app.infra.db.init_db import SqliteDbInitializer
 from app.infra.db.rep.transaction_repository import SqlTransactionRepository
 from app.infra.db.rep.wallet_repository import SqlWalletRepository
-from app.test.db_path_fixture import get_db_script_path
 
 
 @pytest.fixture

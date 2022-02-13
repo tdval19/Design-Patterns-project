@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Protocol, Optional
 from app.core.repository.repository_interfaces import IUserRepository
 

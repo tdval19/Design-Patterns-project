@@ -6,7 +6,6 @@ from app.core.interactors.users import UserInteractor
 from app.core.interactors.users import UserNotFoundException
 from app.core.models.user import User
 from app.infra.db.init_db import SqliteDbInitializer
-from app.test.db_path_fixture import get_db_script_path
 from app.infra.db.rep.user_repository import SqlUserRepository
 
 

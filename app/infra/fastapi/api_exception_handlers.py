@@ -70,5 +70,5 @@ def illegal_amount_exception_handler(
 ) -> JSONResponse:
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={"message" : exc.args},
+        content={"message": exc.args},
     )

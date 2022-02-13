@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional, List
 from app.core.converter.bitcoin_converter import IBitcoinConverter
 from app.core.interactors.auth import IUserAuth, UserCredentials
@@ -8,7 +8,6 @@ from app.core.interactors.users import UserInteractor
 from app.core.interactors.wallets import WalletInteractor
 from app.core.models.statistic import Statistics
 from app.core.models.transaction import Transaction
-from app.core.models.user import User
 from app.core.models.wallet import Wallet
 
 

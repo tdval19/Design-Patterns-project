@@ -5,7 +5,6 @@ import pytest
 from app.core.models.user import User
 from app.infra.db.init_db import SqliteDbInitializer
 from app.infra.db.rep.user_repository import SqlUserRepository
-from app.test.db_path_fixture import get_db_script_path
 
 
 @pytest.fixture
